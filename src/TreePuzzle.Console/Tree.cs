@@ -12,7 +12,7 @@ public static class Tree
     /// <returns></returns>
     public static List<TreeNode> Parse(string inputToParse, ref int parseIndex)
     {
-        List<TreeNode> treeFields = new List<TreeNode>();
+        List<TreeNode> treeNodes = new List<TreeNode>();
         char[] otherChars = [',', '(', ')'];
         StringBuilder word = new StringBuilder();
         while (parseIndex < inputToParse.Length)
@@ -36,15 +36,15 @@ public static class Tree
                 word.Append(inputToParse[parseIndex++]);
             }
 
-            var treeField = new TreeNode(word.ToString().Trim());
+            var treeNode = new TreeNode(word.ToString().Trim());
 
             if (parseIndex < inputToParse.Length && inputToParse[parseIndex] == '(')
             {
                 parseIndex++;
-                treeField.AddChildren(Parse(inputToParse, ref parseIndex));
+                treeNode.AddChildren(Parse(inputToParse, ref parseIndex));
             }
 
-            treeFields.Add(treeField);
+            treeNodes.Add(treeNode);
 
             if (parseIndex < inputToParse.Length && inputToParse[parseIndex] == ',')
             {
@@ -52,45 +52,45 @@ public static class Tree
             }
         }
 
-        return treeFields;
+        return treeNodes;
     }
     
     /// <summary>
     /// Print tree by using basic recursive tree logic
     /// </summary>
-    /// <param name="treeFields">Collection of tree fields</param>
+    /// <param name="treeNodes">Collection of tree nodes</param>
     /// <param name="numberOfIndents">Number of indents based on level of recursion</param>
-    public static void Print(List<TreeNode> treeFields, int numberOfIndents)
+    public static void Print(List<TreeNode> treeNodes, int numberOfIndents)
     {
-        foreach (var treeField in treeFields)
+        foreach (var treeNode in treeNodes)
         {
             System.Console.WriteLine(
-                $"{new string(' ', numberOfIndents * Constants.NUM_OF_SPACES_FOR_INDENT)}- {treeField.Value}");
-            if (treeField.Children.Any())
+                $"{new string(' ', numberOfIndents * Constants.NUM_OF_SPACES_FOR_INDENT)}- {treeNode.Value}");
+            if (treeNode.Children.Any())
             {
-                Print(treeField.Children, numberOfIndents + 1);
+                Print(treeNode.Children, numberOfIndents + 1);
             }
         }
     }
 
     /// <summary>
-    /// Sort list of tree fields
+    /// Sort list of tree nodes
     /// </summary>
-    /// <param name="treeFields">list of tree fields</param>
-    /// <returns>sorted list of tree fields</returns>
-    public static List<TreeNode> Sort(List<TreeNode> treeFields)
+    /// <param name="treeNodes">list of tree nodes</param>
+    /// <returns>sorted list of tree nodes</returns>
+    public static List<TreeNode> Sort(List<TreeNode> treeNodes)
     {
-        List<TreeNode> sortedTreeFields = treeFields.OrderBy(f => f.Value).ToList();
-        foreach (var treeField in sortedTreeFields)
+        List<TreeNode> sortedTreeNodes = treeNodes.OrderBy(f => f.Value).ToList();
+        foreach (var treeField in sortedTreeNodes)
         {
             _SortChildren(treeField);
         }
 
-        return sortedTreeFields;
+        return sortedTreeNodes;
     }
 
     /// <summary>
-    /// Sort a tree field's children till end of list
+    /// Sort a tree node's children till end of list
     /// </summary>
     /// <param name="treeNode">tree field</param>
     private static void _SortChildren(TreeNode treeNode)
